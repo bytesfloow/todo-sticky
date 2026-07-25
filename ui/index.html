@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>待办便签</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-color="yellow" data-font="small">
+  <div id="app" data-tauri-drag-region>
+    <header id="titlebar" data-tauri-drag-region>
+      <span id="title" data-tauri-drag-region>待办便签</span>
+      <div id="titlebar-btns" data-tauri-drag-region>
+        <button id="btn-pin" class="icon-btn" title="置顶 / 取消置顶">📌</button>
+        <button id="btn-hide" class="icon-btn" title="隐藏到托盘">✕</button>
+      </div>
+    </header>
+
+    <main id="list-wrap" data-tauri-drag-region>
+      <ul id="list"></ul>
+      <div id="empty" data-tauri-drag-region>暂无待办，在下面输入一条吧 ~</div>
+    </main>
+
+    <footer id="inputbar">
+      <input id="new-input" type="text" placeholder="输入待办事项，回车添加" autocomplete="off" maxlength="200">
+    </footer>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

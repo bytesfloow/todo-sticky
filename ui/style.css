@@ -1,0 +1,298 @@
+/* ===== 便签配色主题 ===== */
+:root {
+  --fs: 13px; /* 字体档位：small 默认 */
+  --dim: rgba(0, 0, 0, 0.35);
+  --faint: rgba(0, 0, 0, 0.5);
+}
+body[data-color="yellow"] { --bg: #fff7c0; --bg-deep: #f5e58a; --border: #e8d569; --text: #4a4020; }
+body[data-color="pink"]   { --bg: #ffd9e3; --bg-deep: #f7b8ca; --border: #eda0b8; --text: #5c2738; }
+body[data-color="green"]  { --bg: #d8f3dc; --bg-deep: #b2e2bd; --border: #95d5a4; --text: #1f4527; }
+body[data-color="blue"]   { --bg: #d3e5f7; --bg-deep: #aecfee; --border: #8fbde6; --text: #1d3d5c; }
+body[data-color="white"]  { --bg: #fdfdfd; --bg-deep: #ececec; --border: #d4d4d4; --text: #333333; }
+
+body[data-font="small"]  { --fs: 13px; }
+body[data-font="medium"] { --fs: 15px; }
+body[data-font="large"]  { --fs: 18px; }
+body[data-font="xlarge"] { --fs: 22px; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans SC", "Source Han Sans SC", sans-serif;
+  font-size: var(--fs);
+  color: var(--text);
+  background: var(--bg);
+  user-select: none;
+}
+
+#app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* ===== 标题栏 ===== */
+#titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px 6px 12px;
+  background: var(--bg-deep);
+  cursor: move;
+  flex-shrink: 0;
+}
+#title {
+  font-weight: 600;
+  font-size: calc(var(--fs) * 0.95);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: move;
+}
+#titlebar-btns { display: flex; gap: 2px; flex-shrink: 0; }
+.icon-btn {
+  border: none;
+  background: transparent;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.icon-btn:hover { background: rgba(0, 0, 0, 0.12); }
+#btn-pin.pinned { background: rgba(0, 0, 0, 0.18); }
+#btn-pin:not(.pinned) { opacity: 0.45; }
+
+/* ===== 待办列表 ===== */
+#list-wrap {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+#list { list-style: none; }
+
+.todo-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start; /* 多行文本时控件顶部对齐，避免垂直居中留白 */
+  gap: 7px;
+  padding: 6px 10px 6px 10px;
+  border-radius: 4px;
+}
+.todo-item:hover { background: rgba(255, 255, 255, 0.4); }
+.todo-item.dragging { opacity: 0.4; }
+
+/* 拖拽手柄：绝对定位于左边缘窄条，不占布局，悬停时淡入 */
+.drag-handle {
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 10px;
+  height: 20px;
+  line-height: 20px;
+  cursor: grab;
+  opacity: 0;
+  font-size: 10px;
+  text-align: center;
+  user-select: none;
+  color: var(--dim);
+}
+.todo-item:hover .drag-handle { opacity: 0.6; }
+.drag-handle:hover { opacity: 1 !important; }
+.drag-handle:active { cursor: grabbing; }
+
+/* 完成勾选框（小巧、浅色边框） */
+.check-btn {
+  border: 1.5px solid var(--dim);
+  background: transparent;
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--text);
+  padding: 0;
+  line-height: 1;
+}
+.check-btn:hover { border-color: var(--text); }
+/* 优先级 = 复选框描边颜色（低优先级保持默认浅灰） */
+.todo-item[data-prio="high"] .check-btn   { border-color: #e5484d; }
+.todo-item[data-prio="medium"] .check-btn { border-color: #f5a524; }
+/* 完成态不再显示优先级色，统一变灰（“已完成 = 安静”） */
+.todo-item.done .check-btn { background: rgba(0, 0, 0, 0.12); border-color: transparent; }
+
+/* 文本 */
+.todo-text {
+  flex: 1;
+  min-width: 0;
+  word-break: break-all;
+  user-select: text;
+  line-height: 1.45;
+}
+.todo-item.done .todo-text {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+/* ===== 编辑对话框（双击事项弹出） ===== */
+.modal-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.modal-card {
+  width: 86%;
+  max-width: 320px;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #333;
+}
+.modal-title {
+  font-weight: 600;
+  font-size: calc(var(--fs) * 1.05);
+}
+.modal-input {
+  width: 100%;
+  font: inherit;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 10px;
+  outline: none;
+}
+.modal-input:focus { border-color: #4a90d9; }
+
+.modal-prio-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modal-prio-label {
+  color: #888;
+  font-size: calc(var(--fs) * 0.9);
+  margin-right: 2px;
+}
+.prio-pill {
+  font: inherit;
+  font-size: calc(var(--fs) * 0.9);
+  padding: 3px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  background: transparent;
+}
+.prio-pill[data-prio="high"]   { border: 1.5px solid #e5484d; color: #e5484d; }
+.prio-pill[data-prio="medium"] { border: 1.5px solid #f5a524; color: #c77f0a; }
+.prio-pill[data-prio="low"]    { border: 1.5px solid #999; color: #888; }
+.prio-pill[data-prio="high"].active   { background: #e5484d; color: #fff; }
+.prio-pill[data-prio="medium"].active { background: #f5a524; color: #fff; }
+.prio-pill[data-prio="low"].active    { background: #999; color: #fff; }
+
+.modal-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.modal-btn {
+  font: inherit;
+  padding: 5px 18px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+.modal-btn:hover { background: #f0f0f0; }
+.modal-btn.primary {
+  background: #4a90d9;
+  border-color: #4a90d9;
+  color: #fff;
+}
+.modal-btn.primary:hover { background: #3a7fc8; }
+
+/* 删除按钮 */
+.del-btn {
+  border: none;
+  background: transparent;
+  color: var(--dim);
+  cursor: pointer;
+  font-size: 13px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.todo-item:hover .del-btn { visibility: visible; }
+.del-btn:hover { background: rgba(229, 72, 77, 0.25); }
+/* 删除二次确认态 */
+.del-btn.armed {
+  visibility: visible;
+  width: auto;
+  padding: 0 6px;
+  font-size: 12px;
+  background: #e5484d;
+  color: #fff;
+}
+.del-btn.armed:hover { background: #d13438; }
+
+/* 空状态 */
+#empty {
+  text-align: center;
+  opacity: 0.5;
+  padding: 30px 10px;
+  display: none;
+}
+#empty.show { display: block; }
+
+/* ===== 底部输入栏 ===== */
+#inputbar {
+  padding: 8px 10px;
+  background: var(--bg-deep);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+#new-input {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 10px;
+  outline: none;
+}
+#new-input:focus { background: #fff; }
+
+/* 滚动条 */
+#list-wrap::-webkit-scrollbar { width: 8px; }
+#list-wrap::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.2); border-radius: 4px; }
+#list-wrap::-webkit-scrollbar-track { background: transparent; }

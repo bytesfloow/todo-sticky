@@ -1,0 +1,53 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "待办便签",
+  "version": "1.0.0",
+  "identifier": "com.todosticky.dev",
+  "build": {
+    "frontendDist": "../ui",
+    "beforeDevCommand": "",
+    "beforeBuildCommand": ""
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "create": false,
+        "title": "待办便签",
+        "width": 320,
+        "height": 400,
+        "minWidth": 240,
+        "minHeight": 200,
+        "decorations": false,
+        "resizable": true,
+        "alwaysOnTop": true,
+        "skipTaskbar": true,
+        "focus": true
+      },
+      {
+        "label": "settings",
+        "create": false,
+        "url": "settings.html",
+        "title": "设置 - 待办便签",
+        "width": 420,
+        "height": 560,
+        "decorations": true,
+        "resizable": false,
+        "visible": false,
+        "skipTaskbar": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    }
+  },
+  "bundle": {
+    "active": false,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/icon.ico"
+    ]
+  }
+}

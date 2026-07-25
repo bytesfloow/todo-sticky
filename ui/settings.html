@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设置 - 待办便签</title>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+  <div class="panel">
+    <h1>设置</h1>
+
+    <section>
+      <h2>便签配色</h2>
+      <div class="row" id="color-row">
+        <button class="swatch" data-color="yellow" style="background:#f5e58a" title="黄色"></button>
+        <button class="swatch" data-color="pink"   style="background:#f7b8ca" title="粉色"></button>
+        <button class="swatch" data-color="green"  style="background:#b2e2bd" title="绿色"></button>
+        <button class="swatch" data-color="blue"   style="background:#aecfee" title="蓝色"></button>
+        <button class="swatch" data-color="white"  style="background:#fdfdfd" title="白色"></button>
+      </div>
+    </section>
+
+    <section>
+      <h2>字体大小</h2>
+      <div class="row" id="font-row">
+        <label><input type="radio" name="font" value="small"> 小</label>
+        <label><input type="radio" name="font" value="medium"> 中</label>
+        <label><input type="radio" name="font" value="large"> 大</label>
+        <label><input type="radio" name="font" value="xlarge"> 特大</label>
+      </div>
+    </section>
+
+    <section>
+      <h2>全局快捷键（呼出 / 隐藏便签）</h2>
+      <div class="row">
+        <input id="shortcut-input" type="text" readonly placeholder="点击此处，按下新快捷键">
+      </div>
+      <p class="hint">点击输入框后按下组合键（需包含 Ctrl / Alt / Shift / Win 之一）</p>
+    </section>
+
+    <section>
+      <h2>系统</h2>
+      <div class="row">
+        <label><input id="autostart" type="checkbox"> 开机自动启动</label>
+      </div>
+    </section>
+
+    <section>
+      <h2>数据导出</h2>
+      <div class="row">
+        <button id="export-json" class="btn">导出 JSON</button>
+        <button id="export-md" class="btn">导出 Markdown</button>
+        <button id="open-dir" class="btn">打开导出目录</button>
+      </div>
+      <p class="hint" id="export-result"></p>
+      <p class="hint">数据存储位置：<span id="data-dir"></span></p>
+    </section>
+
+    <div class="row footer-row">
+      <span id="save-status" class="hint"></span>
+      <button id="close" class="btn">关闭</button>
+    </div>
+  </div>
+  <script src="settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #333;
+  background: #f6f6f6;
+}
+
+.panel { padding: 18px 22px; }
+
+h1 { font-size: 18px; margin-bottom: 12px; }
+
+section {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+h2 { font-size: 14px; margin-bottom: 10px; color: #555; }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hint { font-size: 12px; color: #999; margin-top: 6px; }
+
+/* 配色色块 */
+.swatch {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  border: 2px solid #ccc;
+  cursor: pointer;
+}
+.swatch.active { border-color: #333; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #333; }
+
+/* 字体档位 */
+#font-row label { cursor: pointer; user-select: none; }
+
+/* 快捷键输入 */
+#shortcut-input {
+  width: 240px;
+  font: inherit;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  background: #fafafa;
+}
+#shortcut-input.recording { border-color: #4a90d9; background: #eaf3fd; }
+
+/* 按钮 */
+.btn {
+  font: inherit;
+  padding: 6px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+.btn:hover { background: #f0f0f0; }
+
+.footer-row { justify-content: space-between; }
+
+#data-dir { user-select: text; word-break: break-all; }
