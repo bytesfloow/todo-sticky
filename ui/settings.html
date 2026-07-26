@@ -36,7 +36,6 @@
       <div class="row">
         <input id="shortcut-input" type="text" readonly placeholder="点击此处，按下新快捷键">
       </div>
-      <p class="hint">点击输入框后按下组合键（需包含 Ctrl / Alt / Shift / Win 之一）</p>
     </section>
 
     <section>
@@ -48,18 +47,21 @@
 
     <section>
       <h2>数据导出</h2>
-      <div class="row">
-        <button id="export-json" class="btn">导出 JSON</button>
-        <button id="export-md" class="btn">导出 Markdown</button>
-        <button id="open-dir" class="btn">打开导出目录</button>
+      <div class="row export-row">
+        <div class="dropdown" id="export-dropdown">
+          <button id="export-btn" class="btn">导出数据 ▾</button>
+          <div class="dropdown-menu" id="export-menu">
+            <button class="dropdown-item" data-format="json">JSON</button>
+            <button class="dropdown-item" data-format="md">Markdown</button>
+          </div>
+        </div>
+        <button id="open-dir" class="btn">打开导出文件夹</button>
       </div>
       <p class="hint" id="export-result"></p>
-      <p class="hint">数据存储位置：<span id="data-dir"></span></p>
     </section>
 
     <div class="row footer-row">
       <span id="save-status" class="hint"></span>
-      <button id="close" class="btn">关闭</button>
     </div>
   </div>
   <script src="settings.js"></script>

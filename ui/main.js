@@ -15,6 +15,18 @@ const $title = document.getElementById("title");
 const $input = document.getElementById("new-input");
 const $btnPin = document.getElementById("btn-pin");
 const $btnHide = document.getElementById("btn-hide");
+const $prioBtn = document.getElementById("prio-btn");
+
+// 新增待办时使用的优先级（默认中级，点击按钮按 中→低→高 循环切换）
+let newPriority = "medium";
+$prioBtn.addEventListener("click", () => {
+  const next = { medium: "low", low: "high", high: "medium" };
+  newPriority = next[newPriority];
+  $prioBtn.dataset.prio = newPriority;
+  $prioBtn.textContent = prioLabel(newPriority);
+  $prioBtn.title = `优先级：${prioLabel(newPriority)}（点击切换）`;
+  $input.focus();
+});
 
 // ---------------- 持久化 ----------------
 
@@ -168,11 +180,12 @@ function openEditDialog(todo) {
   title.className = "modal-title";
   title.textContent = "编辑待办";
 
-  const input = document.createElement("input");
+  // 内容编辑：文本域（Enter 保存，Shift+Enter 换行，Esc 取消）
+  const input = document.createElement("textarea");
   input.className = "modal-input";
-  input.type = "text";
   input.value = todo.text;
   input.maxLength = 200;
+  input.rows = 3;
 
   // 优先级选择（高/中/低 pill）
   const prioRow = document.createElement("div");
@@ -243,8 +256,10 @@ function openEditDialog(todo) {
     if (e.target === mask) close();
   });
   input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") save();
-    else if (e.key === "Escape") close();
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      save();
+    } else if (e.key === "Escape") close();
   });
 }
 
@@ -258,7 +273,7 @@ $input.addEventListener("keydown", (e) => {
     id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     text,
     completed: false,
-    priority: "medium",
+    priority: newPriority,
     createdAt: Date.now(),
   });
   $input.value = "";

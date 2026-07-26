@@ -137,17 +137,27 @@ async function doExport(format) {
     $exportResult.textContent = "导出失败：" + e;
   }
 }
-document.getElementById("export-json").addEventListener("click", () => doExport("json"));
-document.getElementById("export-md").addEventListener("click", () => doExport("md"));
+// 导出下拉菜单
+const $exportDropdown = document.getElementById("export-dropdown");
+const $exportMenu = document.getElementById("export-menu");
+
+document.getElementById("export-btn").addEventListener("click", (e) => {
+  e.stopPropagation();
+  $exportMenu.classList.toggle("show");
+});
+$exportMenu.addEventListener("click", (e) => {
+  const item = e.target.closest(".dropdown-item");
+  if (!item) return;
+  $exportMenu.classList.remove("show");
+  doExport(item.dataset.format);
+});
+document.addEventListener("click", (e) => {
+  if (!$exportDropdown.contains(e.target)) $exportMenu.classList.remove("show");
+});
 document.getElementById("open-dir").addEventListener("click", () => {
   invoke("open_data_dir").catch((e) => {
     $exportResult.textContent = "打开目录失败：" + e;
   });
-});
-
-// 关闭按钮：隐藏设置窗口
-document.getElementById("close").addEventListener("click", () => {
-  invoke("close_settings").catch(console.error);
 });
 
 // ---------------- 初始化 ----------------
@@ -156,9 +166,6 @@ async function init() {
   const state = await invoke("load_state");
   settings = state.settings;
   renderSettings();
-  try {
-    document.getElementById("data-dir").textContent = await invoke("data_dir");
-  } catch (_) { /* 忽略 */ }
 }
 
 init().catch((e) => console.error("初始化失败", e));

@@ -68,4 +68,35 @@ h2 { font-size: 14px; margin-bottom: 10px; color: #555; }
 
 .footer-row { justify-content: space-between; }
 
-#data-dir { user-select: text; word-break: break-all; }
+/* 数据导出：两个等宽按钮 + 导出格式下拉菜单 */
+.export-row { gap: 10px; }
+.export-row #export-dropdown,
+.export-row #open-dir { flex: 1; }
+
+.dropdown { position: relative; }
+.dropdown .btn { width: 100%; }
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  display: none;
+  z-index: 10;
+}
+.dropdown-menu.show { display: block; }
+.dropdown-item {
+  display: block;
+  width: 100%;
+  font: inherit;
+  padding: 8px 12px;
+  border: none;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+.dropdown-item:hover { background: #f0f0f0; }

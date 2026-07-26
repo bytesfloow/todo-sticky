@@ -87,7 +87,7 @@ body {
   display: flex;
   align-items: flex-start; /* 多行文本时控件顶部对齐，避免垂直居中留白 */
   gap: 7px;
-  padding: 6px 10px 6px 10px;
+  padding: 6px 10px 6px 21px; /* 左侧留白容纳拖拽手柄，手柄两侧间距略大 */
   border-radius: 4px;
 }
 .todo-item:hover { background: rgba(255, 255, 255, 0.4); }
@@ -96,14 +96,14 @@ body {
 /* 拖拽手柄：绝对定位于左边缘窄条，不占布局，悬停时淡入 */
 .drag-handle {
   position: absolute;
-  left: 0;
+  left: 2px;
   top: 6px;
-  width: 10px;
-  height: 20px;
-  line-height: 20px;
+  width: 15px;
+  height: 22px;
+  line-height: 22px;
   cursor: grab;
   opacity: 0;
-  font-size: 10px;
+  font-size: 13px;
   text-align: center;
   user-select: none;
   color: var(--dim);
@@ -137,12 +137,12 @@ body {
 /* 完成态不再显示优先级色，统一变灰（“已完成 = 安静”） */
 .todo-item.done .check-btn { background: rgba(0, 0, 0, 0.12); border-color: transparent; }
 
-/* 文本 */
+/* 文本（禁止选中，避免双击编辑时出现选中效果） */
 .todo-text {
   flex: 1;
   min-width: 0;
   word-break: break-all;
-  user-select: text;
+  user-select: none;
   line-height: 1.45;
 }
 .todo-item.done .todo-text {
@@ -186,6 +186,10 @@ body {
   border-radius: 4px;
   padding: 6px 10px;
   outline: none;
+  line-height: 1.45;
+  resize: vertical;
+  min-height: 64px;
+  max-height: 180px;
 }
 .modal-input:focus { border-color: #4a90d9; }
 
@@ -275,13 +279,17 @@ body {
 
 /* ===== 底部输入栏 ===== */
 #inputbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 10px;
   background: var(--bg-deep);
   border-top: 1px solid var(--border);
   flex-shrink: 0;
 }
 #new-input {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   font: inherit;
   color: var(--text);
   background: rgba(255, 255, 255, 0.75);
@@ -291,6 +299,17 @@ body {
   outline: none;
 }
 #new-input:focus { background: #fff; }
+
+/* 优先级切换按钮（输入框右侧，点击循环切换，颜色随优先级变化） */
+#prio-btn {
+  padding: 2px 10px;
+  font-size: calc(var(--fs) * 0.85);
+  flex-shrink: 0;
+  color: #fff;
+}
+#prio-btn[data-prio="high"]   { background: #e5484d; }
+#prio-btn[data-prio="medium"] { background: #f5a524; }
+#prio-btn[data-prio="low"]    { background: #999; }
 
 /* 滚动条 */
 #list-wrap::-webkit-scrollbar { width: 8px; }
